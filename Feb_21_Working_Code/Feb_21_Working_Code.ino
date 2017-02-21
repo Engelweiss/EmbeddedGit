@@ -52,7 +52,7 @@ void setup() {
 
 void loop() {
   // loop code
-  // Heater stuff
+  // Heater module
   heatVal = digitalRead(heatSwitchPin);
   lcd.setCursor(0,2);
   if(heatVal) {
@@ -64,7 +64,7 @@ void loop() {
     digitalWrite(relayPin, LOW);
   }
 
-  // Filter stuff
+  // Filter module
   filterVal = digitalRead(filterSwitchPin);
   if(filterVal) {
     lcd.print("F:ON ");
@@ -75,28 +75,30 @@ void loop() {
     digitalWrite(filterRelayPin, LOW);
   }
 
-  // Date stuff
+  // Date module
   while (date.available() > 0) {
     // get the result of the date process (should be hh:mm:ss):
     String timeString = date.readString();
     lcd.setCursor(0,1);
     lcd.print(timeString);
   }
-
-    // Temperature stuff
-    sensors.requestTemperatures(); // Tell the DS18B20 to get make a measurement
-    lcd.setCursor(0,3);
-    lcd.print("Temp: ");
-    lcd.print(sensors.getTempFByIndex(0),1);
-    lcd.print("F");
-
+  delay(100);
   if (!date.running()) {
     date.begin("date");
     date.addParameter("+TIME: %T");
     date.run();
   }
 
-  //Ds1620 stuff
+  // DS18B20 temperature module
+  sensors.requestTemperatures(); // Tell the DS18B20 to get make a measurement
+  lcd.setCursor(0,3);
+  lcd.print("Temp: ");
+  lcd.print(sensors.getTempFByIndex(0),1);
+  lcd.print("F");
+
+
+
+  //DS1620 temerature module
   ds1620.start_conv();
   int raw_data = ds1620.read_data();
   ds1620.stop_conv();
@@ -106,5 +108,5 @@ void loop() {
   lcd.print(temp);
   lcd.print("C");
 
-  delay(200);
+  delay(100);
 }
