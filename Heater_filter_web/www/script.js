@@ -1,28 +1,40 @@
 // Function to control heater and filter
 function buttonClick(clicked_id){
-
+	var xmlHttp = new XMLHttpRequest();
+	xmlHttp.onreadystatechange = function() { 
+    if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+        callback(xmlHttp.responseTest);
+    }
     if (clicked_id == "1"){
         $.get( "curl.php", {
         pin: "7", state: "1"} );
-		document.write("turned on heater");
+        
+        
+
+    xmlHttp.open("GET", 'http://10.30.77.167/arduino/digital/10/1', true); // true for asynchronous 
+    xmlHttp.send(null);
+		
     } 
 
     if (clicked_id == "2"){
         $.get( "curl.php", {
         pin: "7", state: "0"} ); 
-		document.write("turned off heater");
+	xmlHttp.open("GET", 'http://10.30.77.167/arduino/digital/10/0', true); // true for asynchronous 
+    xmlHttp.send(null);
     } 
 
     if (clicked_id == "3"){
         $.get( "curl.php", {
         pin: "10", state: "1"} );  
-		document.write("turned on filter");
+    xmlHttp.open("GET", 'http://10.30.77.167/arduino/digital/7/1', true); // true for asynchronous 
+    xmlHttp.send(null);
     } 
 
     if (clicked_id == "4"){
         $.get( "curl.php", {
         pin: "10", state: "0"} ); 
-	document.write("turned off filter");		
+    xmlHttp.open("GET", 'http://10.30.77.167/arduino/digital/7/0', true); // true for asynchronous 
+    xmlHttp.send(null);		
     } 
 
 }
@@ -31,22 +43,22 @@ function updateClock() {
     var now = new Date(), // current date
         months = ['January', 'February', 'March', 'April', 'May', 'June', 'July',
 					'August', 'September', 'October', 'November', 'December']; 
-		var hours = new String(now.getHours());
-		var minutes = new String(now.getMinutes());
-		var seconds = new String(now.getSeconds());
-		if(hours.length ==1)
+		hours = new String(now.getHours());
+		minutes = new String(now.getMinutes());
+		seconds = new String(now.getSeconds());
+		zero = new String("0");
+		if(hours.length == 1)
 		{
-			hours = "0" + hours;
+			hours=zero.concat(hours);
 		}
-		if(minutes.length ==1)
+		if(minutes.length == 1)
 		{
-			minutes = "0" + minutes;
+			minutes=zero.concat(minutes);
 		}
-		if(seconds.length ==1)
+		if(seconds.length == 1)
 		{
-			seconds = "0" + seconds;
+			seconds=zero.concat(seconds);
 		}
-		
 		time = hours + ':' + minutes + ':' + seconds;
 
         date = [now.getDate(), 
@@ -59,3 +71,4 @@ function updateClock() {
     // call this function again in 1000ms
     setInterval(updateClock, 1000);
 }
+
