@@ -26,3 +26,36 @@ function buttonClick(clicked_id){
     } 
 
 }
+
+function updateClock() {
+    var now = new Date(), // current date
+        months = ['January', 'February', 'March', 'April', 'May', 'June', 'July',
+					'August', 'September', 'October', 'November', 'December']; 
+		var hours = new String(now.getHours());
+		var minutes = new String(now.getMinutes());
+		var seconds = new String(now.getSeconds());
+		if(hours.length ==1)
+		{
+			hours = "0" + hours;
+		}
+		if(minutes.length ==1)
+		{
+			minutes = "0" + minutes;
+		}
+		if(seconds.length ==1)
+		{
+			seconds = "0" + seconds;
+		}
+		
+		time = hours + ':' + minutes + ':' + seconds;
+
+        date = [now.getDate(), 
+                months[now.getMonth()],
+                now.getFullYear()].join(' ');
+
+    // set the content of the element with the ID time to the formatted string
+    document.getElementById('time').innerHTML = [date, time].join(' / ');
+
+    // call this function again in 1000ms
+    setInterval(updateClock, 1000);
+}
