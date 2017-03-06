@@ -39,6 +39,14 @@ function buttonClick(clicked_id){
 
 }
 
+function updateHeaterInfo(){
+	document.getElementById('Heater Info').innerHTML = "Off";
+}
+
+function updateFilterInfo(){
+	document.getElementById('Filter Info').innerHTML = "Off";
+}
+
 function updateClock() {
     var now = new Date(), // current date
         months = ['January', 'February', 'March', 'April', 'May', 'June', 'July',
@@ -71,4 +79,3 @@ function updateClock() {
     // call this function again in 1000ms
     setInterval(updateClock, 1000);
 }
-
