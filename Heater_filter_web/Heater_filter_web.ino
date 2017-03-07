@@ -94,20 +94,6 @@ void loop() {
     digitalWrite(filterRelayPin, LOW);
   }
 
-  // Date module
-  while (date.available() > 0) {
-    // get the result of the date process (should be hh:mm:ss):
-    String timeString = date.readString();
-    lcd.setCursor(0,1);
-    lcd.print(timeString);
-  }
-  delay(100);
-  if (!date.running()) {
-    date.begin("date");
-    date.addParameter("+TIME: %T");
-    date.run();
-  }
-
   // DS18B20 temperature module
   sensors.requestTemperatures(); // Tell the DS18B20 to get make a measurement
   lcd.setCursor(0,3);
@@ -126,8 +112,6 @@ void loop() {
   lcd.print("DS1620: ");
   lcd.print(temp);
   lcd.print("C");
-
-  delay(100);
 }
 
 
@@ -137,7 +121,22 @@ void process(BridgeClient client) {
 
   // is "digital" command?
   if (command == "digital") {
+    client.print(F("Go "));
     digitalCommand(client);
+  }
+
+  if (command == "filter") {
+    if(digitalRead(relayPin))
+      client.print(F("On"));
+    else
+      client.print(F("Off"));
+  }
+
+  if (command == "heater") {
+  if(digitalRead(filterRelayPin))
+    client.println(F("On"));
+  else
+    client.println(F("Off"));
   }
 
   // is "analog" command?
@@ -173,9 +172,9 @@ void digitalCommand(BridgeClient client) {
   client.println(value);
 
   // Update datastore key with the current pin value
-  String key = "D";
-  key += pin;
-  Bridge.put(key, String(value));
+  //String key = "D";
+ // key += pin;
+  //Bridge.put(key, String(value));
 }
 
 void analogCommand(BridgeClient client) {
@@ -253,4 +252,3 @@ void modeCommand(BridgeClient client) {
   client.print(F("error: invalid mode "));
   client.print(mode);
 }
-
