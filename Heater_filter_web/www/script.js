@@ -6,14 +6,9 @@ function buttonClick(clicked_id){
         callback(xmlHttp.responseTest);
     }
     if (clicked_id == "1"){
-        $.get( "curl.php", {
-        pin: "7", state: "1"} );
-        
-        
-
     xmlHttp.open("GET", 'http://10.30.77.167/arduino/digital/10/1', true); // true for asynchronous 
     xmlHttp.send(null);
-		
+	updateHeaterInfo();
     } 
 
     if (clicked_id == "2"){
@@ -21,6 +16,7 @@ function buttonClick(clicked_id){
         pin: "7", state: "0"} ); 
 	xmlHttp.open("GET", 'http://10.30.77.167/arduino/digital/10/0', true); // true for asynchronous 
     xmlHttp.send(null);
+    updateHeaterInfo();
     } 
 
     if (clicked_id == "3"){
@@ -28,23 +24,37 @@ function buttonClick(clicked_id){
         pin: "10", state: "1"} );  
     xmlHttp.open("GET", 'http://10.30.77.167/arduino/digital/7/1', true); // true for asynchronous 
     xmlHttp.send(null);
+    updateFilterInfo()
     } 
 
     if (clicked_id == "4"){
         $.get( "curl.php", {
         pin: "10", state: "0"} ); 
     xmlHttp.open("GET", 'http://10.30.77.167/arduino/digital/7/0', true); // true for asynchronous 
-    xmlHttp.send(null);		
+    xmlHttp.send(null);	
+    updateFilterInfo()	
     } 
 
 }
 
 function updateHeaterInfo(){
-	document.getElementById('Heater Info').innerHTML = "Off";
+	var xmlHttp = new XMLHttpRequest();
+	xmlHttp.onreadystatechange = function() { 
+    if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+       document.getElementById('Heater Info').innerHTML = xmlHttp.response;
+    }
+    xmlHttp.open("GET", 'http://10.30.77.167/arduino/heater/stuff', true); // true for asynchronous 
+    xmlHttp.send(null);
 }
 
 function updateFilterInfo(){
-	document.getElementById('Filter Info').innerHTML = "Off";
+	var xmlHttp = new XMLHttpRequest();
+	xmlHttp.onreadystatechange = function() { 
+    if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+        document.getElementById('Filter Info').innerHTML = xmlHttp.response;
+    }
+    xmlHttp.open("GET", 'http://10.30.77.167/arduino/filter/stuff', true); // true for asynchronous 
+    xmlHttp.send(null);
 }
 
 function updateClock() {
