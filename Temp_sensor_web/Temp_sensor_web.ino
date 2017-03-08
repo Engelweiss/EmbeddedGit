@@ -73,26 +73,6 @@ void loop() {
     client.stop();
   }
 
-  lcd.setCursor(0,2);
-
-  // DS18B20 temperature module
-  sensors.requestTemperatures(); // Tell the DS18B20 to get make a measurement
-  waterTemp = sensors.getTempFByIndex(0);
-  //lcd.setCursor(0,3);
-  //lcd.print("Temp: ");
-  //lcd.print(sensors.getTempFByIndex(0),1);
-  //lcd.print("F");
-
-  //DS1620 temerature module
-  ds1620.start_conv();
-  int raw_data = ds1620.read_data();
-  ds1620.stop_conv();
-  float temp = raw_data / 2.0; 
-  airTemp = ((9*temp)/5) + 32;
-  //lcd.setCursor(0,0);
-  //lcd.print("DS1620: ");
-  //lcd.print(temp);
-  //lcd.print("C");
 }
 
 void process(BridgeClient client) {
@@ -120,10 +100,18 @@ void process(BridgeClient client) {
   }
 
   if (command == "air_temperature") {
+    ds1620.start_conv();
+    int raw_data = ds1620.read_data();
+    ds1620.stop_conv();
+    float temp = raw_data / 2.0; 
+    airTemp = ((9*temp)/5) + 32;
     client.println(airTemp);
   }
 
   if (command == "water_temperature") {
+  // DS18B20 temperature module
+    sensors.requestTemperatures(); // Tell the DS18B20 to get make a measurement
+    waterTemp = sensors.getTempFByIndex(0);
     client.println(waterTemp);
   }
 
