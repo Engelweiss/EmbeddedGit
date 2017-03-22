@@ -1,0 +1,48 @@
+<html>
+	<head>
+		<title>Pool Controller Land</title>
+		
+		<LINK href="style.css" rel="stylesheet" type="text/css" />
+		<script type="text/javascript" src="jquery-2.0.3.min.js"></script>
+		<script type="text/javascript" src="script.js"></script>
+		<meta charset="UTF-8">
+	</head>
+	
+	
+	<body>
+	
+	
+<div class="mainContainer">
+	<div id="time">Current Time: </div>
+	<script>updateClock();</script>
+<div class="buttonBlock"><span class="buttonTitle">Heater</span>
+        <button class="heaterButton" type="button" id="1" onClick="buttonClick(this.id)">On</button>
+        <button class="heaterButton" type="button" id="2" onClick="buttonClick(this.id)">Off</button>
+		
+</div>
+
+<font>Heater Status: </font><font id="Heater Info"> </font>
+<script>updateHeaterInfo();</script>
+<div class="buttonBlock"><span class="buttonTitle">Filter</span>
+   
+    <button class="filterButton" type="button" id="3" onClick="buttonClick(this.id)">On</button>
+    <button class="filterButton" type="button" id="4" onClick="buttonClick(this.id)">Off</button>
+ </div>
+
+ <font>Filter Status: </font><font id="Filter Info"></font>
+ <script>updateFilterInfo();</script>
+ 
+ <p>
+	<font>Air Temperature: </font><font id="Air Temp"></font><font>°F</font>
+	<script>updateAirTempInfo();</script>
+ </p>
+ 
+  <p>
+	<font>Water Temperature: </font><font id="Water Temp"></font><font>°F</font>
+	<script>updateWaterTempInfo();</script>
+ </p>
+ 
+</body>
+	
+	
+</html>
