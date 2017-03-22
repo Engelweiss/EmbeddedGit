@@ -1,0 +1,33 @@
+<html>
+	<head>
+		<title>Pool Controller</title>
+		
+		<link href="style.css" rel="stylesheet" type="text/css" />
+		<script type="text/javascript" src="jquery-2.0.3.min.js"></script>
+		<script type="text/javascript" src="script.js"></script>
+		<meta charset="UTF-8">
+	</head>
+	
+	
+	<body>
+	<p color="white"><a title="Homepage" href="index.html">Home</a> 
+		<br color="white"><a title="Automation Page" href="automation.html">Automation Settings</a>
+		</p>
+	
+<div id="color-overlay">
+	<div id="center" class="column">
+	<p><h1>Automation Settings</h1></p>
+	<p id="time"><font>Current Time: </font></p>
+	<script>updateClock();</script>
+	</div>
+	
+	<div id="auto-settings">
+	<p><font>Current Automation Settings: </font><button type="button" id="5" onClick="buttonClick(this.id)">Edit</button>
+	
+	</p>
+	</div>
+ 
+</body>
+	
+	
+</html>

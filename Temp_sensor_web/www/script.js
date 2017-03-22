@@ -6,45 +6,41 @@ function buttonClick(clicked_id){
         callback(xmlHttp.responseTest);
     }
     if (clicked_id == "1"){
-    xmlHttp.open("GET", 'http://10.30.77.167/arduino/digital/10/1', true); // true for asynchronous 
+    xmlHttp.open("GET", 'http://10.30.77.167/arduino/digital/10/1', false); // true for asynchronous 
     xmlHttp.send(null);
 	updateHeaterInfo();
     } 
 
     if (clicked_id == "2"){
-        $.get( "curl.php", {
-        pin: "7", state: "0"} ); 
-	xmlHttp.open("GET", 'http://10.30.77.167/arduino/digital/10/0', true); // true for asynchronous 
+	xmlHttp.open("GET", 'http://10.30.77.167/arduino/digital/10/0', false); // true for asynchronous 
     xmlHttp.send(null);
     updateHeaterInfo();
     } 
 
     if (clicked_id == "3"){
-        $.get( "curl.php", {
-        pin: "10", state: "1"} );  
-    xmlHttp.open("GET", 'http://10.30.77.167/arduino/digital/7/1', true); // true for asynchronous 
+    xmlHttp.open("GET", 'http://10.30.77.167/arduino/digital/7/1', false); // true for asynchronous 
     xmlHttp.send(null);
-    updateFilterInfo()
+    updateFilterInfo();
     } 
 
     if (clicked_id == "4"){
-        $.get( "curl.php", {
-        pin: "10", state: "0"} ); 
-    xmlHttp.open("GET", 'http://10.30.77.167/arduino/digital/7/0', true); // true for asynchronous 
+    xmlHttp.open("GET", 'http://10.30.77.167/arduino/digital/7/0', false); // true for asynchronous 
     xmlHttp.send(null);	
-    updateFilterInfo()	
+    updateFilterInfo();	
     } 
 
 }
 
 function updateHeaterInfo(){
-	var xmlHttp = new XMLHttpRequest();
-	xmlHttp.onreadystatechange = function() { 
-    if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
-       document.getElementById('Heater Info').innerHTML = xmlHttp.response;
+	var xmlHttp2 = new XMLHttpRequest();
+	xmlHttp2.onreadystatechange = function() { 
+    if (xmlHttp2.readyState == 4 && xmlHttp2.status == 200)
+       document.getElementById('Heater Info').innerHTML = xmlHttp2.response;
+    if (xmlHttp2.readyState == 4 && xmlHttp2.status == 500)
+       setTimeout(updateHeaterInfo,1000);
     }
-    xmlHttp.open("GET", 'http://10.30.77.167/arduino/heater/stuff', true); // true for asynchronous 
-    xmlHttp.send(null);
+    xmlHttp2.open("GET", 'http://10.30.77.167/arduino/heater/stuff', true); // true for asynchronous 
+    xmlHttp2.send(null);
 }
 
 function updateFilterInfo(){
@@ -52,6 +48,8 @@ function updateFilterInfo(){
 	xmlHttp.onreadystatechange = function() { 
     if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
         document.getElementById('Filter Info').innerHTML = xmlHttp.response;
+    if (xmlHttp.readyState == 4 && xmlHttp.status == 500)
+        setTimeout(updateFilterInfo,1000);
     }
     xmlHttp.open("GET", 'http://10.30.77.167/arduino/filter/stuff', true); // true for asynchronous 
     xmlHttp.send(null);
@@ -60,10 +58,10 @@ function updateFilterInfo(){
 function updateAirTempInfo(){
 	var xmlHttp = new XMLHttpRequest();
 	xmlHttp.onreadystatechange = function() { 
-    if (xmlHttp.readyState == 4 && xmlHttp.status == 200){
+    if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
         document.getElementById('Air Temp').innerHTML = xmlHttp.response;
-		//setTimeout(updateAirTempInfo, 3000);
-	}
+    if (xmlHttp.readyState == 4 && xmlHttp.status == 500)
+        setTimeout(updateAirTempInfo,1000);
     }
     xmlHttp.open("GET", 'http://10.30.77.167/arduino/air_temperature/stuff', true); // true for asynchronous 
     xmlHttp.send(null);
@@ -73,10 +71,10 @@ function updateAirTempInfo(){
 function updateWaterTempInfo(){
 	var xmlHttp = new XMLHttpRequest();
 	xmlHttp.onreadystatechange = function() { 
-    if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+    if (xmlHttp.readyState == 4 && xmlHttp.status == 200) 
         document.getElementById('Water Temp').innerHTML = xmlHttp.response;
-		//setTimeout(updateWaterTempInfo, 3000);
-	}
+    if (xmlHttp.readyState == 4 && xmlHttp.status == 500)
+        setTimeout(updateWaterTempInfo,1000);
     }
     xmlHttp.open("GET", 'http://10.30.77.167/arduino/water_temperature/stuff', true); // true for asynchronous 
     xmlHttp.send(null);
