@@ -1,0 +1,63 @@
+<html>
+	<head>
+		<title>Pool Controller</title>
+				
+		<link href="style.css" rel="stylesheet" type="text/css" />
+		<script type="text/javascript" src="jquery-2.0.3.min.js"></script>
+		<script type="text/javascript" src="script.js"></script>
+		<meta charset="UTF-8">
+	</head>
+	
+	
+	<body>
+
+		<p color="white"><a title="Homepage" href="index.html">Home</a> 
+		<br color="white"><a title="Automation Page" href="automation.html">Automation Settings</a>
+		</p>
+
+<div id="color-overlay">
+
+  <div id="center" class="column">
+	<p><h1>Pool Controller</h1></p>
+	<p id="time"><font>Current Time: </font></p>
+	<script>updateClock();</script>
+	<div id="control-buttons">
+	<div><font>Heater</font>
+        <button type="button" id="1" onClick="buttonClick(this.id)">On</button>
+        <button type="button" id="2" onClick="buttonClick(this.id)">Off</button>
+
+
+		
+	<font>Filter</font>
+   
+		<button type="button" id="3" onClick="buttonClick(this.id)">On</button>
+		<button type="button" id="4" onClick="buttonClick(this.id)">Off</button>
+		</div>
+		<p><font>Heater Status: </font><font id="Heater Info" style="color:black"></font><font id="Heater-time" style="color:black"></font></p>
+		<script>updateHeaterInfo();</script>
+		<p><font>Filter Status: </font><font id="Filter Info" style="color:black"></font><font id="Filter-time" style="color:black"></font></p>
+		<script>updateFilterInfo();</script>
+ 
+		<p>
+		<font>Air Temperature: </font><font id="Air Temp" style="color:black"></font><font>°F</font>
+		<script>updateAirTempInfo();</script>
+		</p>
+ 
+		<p>
+		<font>Water Temperature: </font><font id="Water Temp" style="color:black"></font><font>°F</font>
+		<script>updateWaterTempInfo();</script>
+		</p>
+		
+		<p>
+		<font>Water Level: </font><font id="Water Level" style="color:black"></font>
+		<script>updateWaterLevelInfo();</script>
+		</p>
+		</div>
+		</div>
+  </div>
+	
+ 
+</body>
+	
+	
+</html>
