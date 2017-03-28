@@ -40,21 +40,12 @@ a:hover, a:active {
 	position: absolute;
 	top: 150px;
 	left: 0px;
+	width: 700px;
+	height: 350px;
+	opacity: 1;
 	margin-left:5em
 	
 }
-
-
-#left-bar{
-   position: absolute;
-   top: 50px;
-   left: 0px;
-   width: 175px;
-   height: 300px;
-   background-color: 00008B;
-   opacity: 1;
-}	
-
 
 h1 {
 	position: absolute;
@@ -76,14 +67,5 @@ font{
     font-size: 120%;
 }
 
-.button{
-	background-color: #4CAF50; /* Green */
-    border: none;
-    color: white;
-    padding: 15px 32px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-}
+
 
