@@ -1,0 +1,71 @@
+body {
+    background-image: url("background.jpg");
+}
+
+a:link, a:visited {
+    background-color: navy;
+    color: white;
+    padding: 14px 25px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+	border: 2px solid black;
+	width: 110px;
+}
+
+
+a:hover, a:active {
+    background-color: navy;
+	border: 2px solid black;
+}
+
+#color-overlay {
+   position: absolute;
+   top: 0px;
+   left: 175px;
+   width: 900px;
+   height: 500px;
+   background-color: white;
+   opacity: 0.6;
+}
+
+#control-buttons{
+	position: absolute;
+	top: 150px;
+	left: 0px;
+	
+}
+
+#auto-settings{
+	position: absolute;
+	top: 150px;
+	left: 0px;
+	width: 700px;
+	height: 350px;
+	opacity: 1;
+	margin-left:5em
+	
+}
+
+h1 {
+	position: absolute;
+	left: 100px;
+    color: red;
+	font-family: arial;
+    font-size: 300%;
+
+}
+p {
+    color: red;
+	font-family: arial;
+    font-size: 120%;
+	font-weight: bold;
+}
+
+font{
+	font-family: arial;
+    font-size: 120%;
+}
+
+
+
