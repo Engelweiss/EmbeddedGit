@@ -21,14 +21,14 @@ var amPmAutoPref = '0';
 
 window.onload = function(){
 	console.log('Starting up!');
-	//saveAutoSettings(); // will need to be removed later
-	autoInt = setInterval(checkAutomation, 30000);
 	airTempInt = setInterval(updateAirTempInfo, 30000);
 	waterTempInt = setInterval(updateWaterTempInfo, 30000);
 	waterLevelInt = setInterval(updateWaterLevelInfo, 30000);
 	pHInt = setInterval(updatepHInfo, 30000);
 	initializeHeater();
 	initializeFilter();
+	heaterInt = setInterval(updateHeaterInfo, 30000);
+	filterInt = setInterval(updateFilterInfo, 30000);
 	
 }
 
@@ -196,9 +196,7 @@ function buttonClick(clicked_id){
 			console.log(response.localeCompare('Off'));
 			console.log(response.localeCompare('On'));
 			}
-	
-	
-	
+		
     }
     } 
 
@@ -237,17 +235,14 @@ function buttonClick(clicked_id){
 			console.log(response.localeCompare('On'));
 			}
 	
-	
-	
     }
-    //updateHeaterInfo();
+
     } 
 
     else if (clicked_id == "3"){
 		document.getElementById('Filter Info').innerHTML = "On";
     xmlHttp.open("GET", 'http://reyunionsvrg.local/arduino/digital/7/1', true); // true for asynchronous 
     xmlHttp.send(null);
-    //updateFilterInfo();
 	
 	xmlHttp.onreadystatechange = function() { 
     if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
@@ -257,7 +252,7 @@ function buttonClick(clicked_id){
 	
 	response = xmlHttp.response;
 	console.log(response);
-	if(response.localeCompare('On') == 0)
+	if(response.localeCompare('On') == 1)
 	{
 		console.log('Filter was turned on.');
 		if(filterOn == false)
@@ -266,7 +261,7 @@ function buttonClick(clicked_id){
 			createFilterTime();
 		}
 	}
-	else if(response.localeCompare('Off') == 0)
+	else if(response.localeCompare('Off') == 1)
 	{
 		console.log('Filter was turned off.');
 		filterOn = false;
@@ -278,8 +273,6 @@ function buttonClick(clicked_id){
 		console.log(response.localeCompare('Off'));
 		console.log(response.localeCompare('On'));
 	}
-	
-	
 
     }
     } 
@@ -288,7 +281,6 @@ function buttonClick(clicked_id){
 		document.getElementById('Filter Info').innerHTML = "Off";
     xmlHttp.open("GET", 'http://reyunionsvrg.local/arduino/digital/7/0', true); // true for asynchronous 
     xmlHttp.send(null);	
-    //updateFilterInfo();
 	
 	xmlHttp.onreadystatechange = function() { 
     if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
@@ -298,7 +290,7 @@ function buttonClick(clicked_id){
 	
 	response = xmlHttp.response;
 	console.log(response);
-	if(response.localeCompare('On') == 0)
+	if(response.localeCompare('On') == 1)
 	{
 		console.log('Filter was turned on.');
 		if(filterOn == false)
@@ -307,7 +299,7 @@ function buttonClick(clicked_id){
 			createFilterTime();
 		}
 	}
-	else if(response.localeCompare('Off') == 0)
+	else if(response.localeCompare('Off') == 1)
 	{
 		console.log('Filter was turned off.');
 		filterOn = false;
@@ -342,35 +334,9 @@ function updateHeaterInfo(){
        setTimeout(updateHeaterInfo,1000);
    
 	response = xmlHttp.response;
-	
+	 
+}
 
-		if(response.localeCompare('On') == 1)
-		{
-			console.log('Heater was turned on.');
-			if(heaterOn == false)
-			{
-				heaterOn = true;
-				createHeaterTime();
-			}
-		}
-		else if(response.localeCompare('Off') == 1)
-		{
-			console.log('Heater was turned off.');
-			heaterOn = false;
-			resetHeaterTime();
-		}
-		else{
-			console.log('Undefined response');
-			console.log(response);
-			console.log(response.localeCompare('Off'));
-			console.log(response.localeCompare('On'));
-			}
-	
-	
-	
-    }
-	
-   
 }
 
 function updateFilterInfo(){
@@ -382,35 +348,8 @@ function updateFilterInfo(){
         setTimeout(updateFilterInfo,1000);
 	
 	response = xmlHttp.response;
-	console.log(response);
-	if(response.localeCompare('On') == 0)
-	{
-		console.log('Filter was turned on.');
-		if(filterOn == false)
-		{
-			filterOn = true;
-			createFilterTime();
-		}
-	}
-	else if(response.localeCompare('Off') == 0)
-	{
-		console.log('Filter was turned off.');
-		filterOn = false;
-		resetFilterTime();
-	}
-	else{
-		console.log('Undefined response');
-		console.log(response);
-		console.log(response.localeCompare('Off'));
-		console.log(response.localeCompare('On'));
-	}
 	
-	
-
-    }
-	
-    xmlHttp.open("GET", 'http://reyunionsvrg.local/arduino/filter/shr', true); // true for asynchronous 
-    xmlHttp.send(null);
+}
 }
 
 function updateAirTempInfo(){
@@ -525,17 +464,16 @@ function createHeaterTime() {
 
 function createFilterTime() {
 	console.log('filter time created');
-	document.getElementById('Filter-time').innerHTML =' for 0 days 0 hours 0 minutes';
 	filterStartTime= new Date();
 	filterTimeMili = filterStartTime.getTime();	
 	var filterTimeMiliStr = filterTimeMili.toString();
 	console.log(filterTimeMili);
+	document.getElementById('Filter-time').innerHTML =' for 0 days 0 hours 0 minutes';
 	var requestString = 'http://reyunionsvrg.local/arduino/storeFilterTime/' + filterTimeMili + '/shr';
 	var xmlHttp = new XMLHttpRequest();
 	xmlHttp.open("GET", requestString, false); // true for asynchronous 
     xmlHttp.send(null);
 	xmlHttp.onreadystatechange = function() { 
-    if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
     if (xmlHttp.readyState == 4 && xmlHttp.status == 500)
        setTimeout(createFilterTime,1000);
 	}
@@ -557,8 +495,7 @@ function updateHeaterTime(){
 	
 	outputString = new String(' for ' + days + ' days ' + hours + ' hours ' + minutes + ' minutes ');
 	document.getElementById('Heater-time').innerHTML = outputString;
-	
-	//setTimeout(updateHeaterTime, 10000);
+
 }
 
 function updateFilterTime(){
@@ -576,17 +513,8 @@ function updateFilterTime(){
 	outputString = new String(' for ' + days + ' days ' + hours + ' hours ' + minutes + ' minutes ');
 	document.getElementById('Filter-time').innerHTML = outputString;
 
-	//setTimeout(updateFilterTime, 10000);
 }
 
-function storeHeaterTime(){
-	
-	
-}
-
-function storeFilterTime(){
-	
-}
 
 function resetHeaterTime(){
 	document.getElementById('Heater-time').innerHTML = '';
@@ -626,29 +554,5 @@ function resetFilterTime(){
        setTimeout(createFilterTime,1000);
 	}
 	filterInt = setInterval(updateFilterTime, 10000);
-}
-
-
-
-function checkAutomation(){
-	var xmlHttp = new XMLHttpRequest();
-	xmlHttp.open("GET", 'http://reyunionsvrg.local/arduino/check_auto_setting/shr', true); // true for asynchronous 
-    xmlHttp.send(null);
-	xmlHttp.onreadystatechange = function() { 
-    if (xmlHttp.readyState == 4 && xmlHttp.status == 500)
-        setTimeout(checkAutomation,1000);
-    }	
-	var response = xmlHttp.response;
-	console.log("Automation " +response);
-	if(response.length == 8){
-		onOffAutoPref = response.charAt(0);
-		heaterFilterAutoPref = response.charAt(1);
-		dayAutoPref = response.charAt(2);
-		hrAutoPref = response.charAt(3) + response.charAt(4);
-		minAutoPref = response.charAt(5) + response.charAt(6);
-		amPmAutoPref = response.charAt(7);
-		
-		console.log(onOffAutoPref + heaterFilterAutoPref + dayAutoPref + hrAutoPref + minAutoPref + amPmAutoPref);
-		
-	}
+	
 }
