@@ -12,11 +12,13 @@
 #include <BridgeServer.h>
 #include <BridgeClient.h>
 #include <FileIO.h>
+#include <TimeLib.h>
 
 #define ONE_WIRE_BUS 6
 #define pHSensorPin 3
 #define Offset 0.00
 #define ArrayLength 10
+
 
 
 // Listen to the default port 5555, the Yún webserver
@@ -38,6 +40,10 @@ int airTemp=0;
 String heaterStartTime="notSet";
 String filterStartTime="notSet";
 String autoData="notSet";
+int autoTime= 0;
+int autoEndTime = 0;
+int programTime = 0;
+float heaterLimit = 80;
 
 // Create a onewire instanace
 OneWire oneWire(ONE_WIRE_BUS);
@@ -51,6 +57,8 @@ int lastSecond = -1;
 Ds1620 ds1620 = Ds1620(A0/*rst*/,A1/*clk*/,A2/*dq*/);
 
 void setup() {
+
+  setupInterrupts();
   // setup code
   pinMode(heaterRelayPin, OUTPUT);
   pinMode(filterRelayPin, OUTPUT);
@@ -70,9 +78,6 @@ void setup() {
     server.listenOnLocalhost();
     server.begin();
 
-    for(int i=0; i<20; i++){
-      autoData[i] = "";
-}
 }
 
 void loop() {
@@ -97,7 +102,7 @@ void loop() {
   int raw_data = ds1620.read_data();
   ds1620.stop_conv();
   float temp = raw_data / 2.0; 
-  airTemp = (int)((9*temp)/5) + 22;
+  airTemp = (int)((9*temp)/5) + 32;
 
 
 }
@@ -111,7 +116,6 @@ void process(BridgeClient client) {
 
   // is "digital" command?
   if (command == "digital") {
-    client.print(F("Go "));
     digitalCommand(client);
   }
 
@@ -186,10 +190,6 @@ void process(BridgeClient client) {
     setAutomation(client);
   }
 
-  else if(command == "add_auto_setting"){
-    client.println("adding setting");
-    setAutomation(client);
-  }
   else if(command == "check_auto_setting"){
     checkAutomation(client);
   }
@@ -222,7 +222,6 @@ void digitalCommand(BridgeClient client) {
     client.println(F("On"));
   else
     client.println(F("Off"));
-  client.print(F("Pin D"));
   
   }
   else if(pin == filterRelayPin)
@@ -231,7 +230,6 @@ void digitalCommand(BridgeClient client) {
     client.println(F("On"));
   else
     client.println(F("Off"));
-  client.print(F("Pin D"));
   }
   
 }
@@ -278,13 +276,24 @@ void retrieveFilterStatusTime(BridgeClient client) {
 }
 
 void setAutomation(BridgeClient client) {
-  autoData = client.readStringUntil('/');
-  autoData = "happyDay";
+  autoData =  client.readStringUntil('/');
+  autoTime = client.parseInt() * 60;
+  
+  if(autoData == "heater")
+  {
+    digitalWrite(heaterRelayPin, 1);
+  }
+  else if(autoData == "filter")
+  {
+    digitalWrite(filterRelayPin, 1);
+  }
+
+  autoEndTime = programTime + autoTime;
   
 }
 
 void checkAutomation(BridgeClient client) {
-  client.print(autoData);
+  client.println(autoData + " " + autoTime);
 }
 
 void getPHData(BridgeClient client) {
@@ -311,6 +320,52 @@ double averageArray(int* arr){
   }
   avg = amount/ArrayLength;
   return avg;
+}
+
+void setupInterrupts(){
+
+  cli();             // disable global interrupts
+  TCCR1A = 0;        // set entire TCCR1A register to 0
+  TCCR1B = 0x04;
+
+  TCCR1C = 0; // not forcing output compare
+  TCNT1 = 0; // set timer counter initial value (16 bit vaue)
+  
+   // Interrupts on overflow (every 1 second)
+   OCR1A = 0xF440; 
+
+   TIMSK1 = 2;
+    // enable global interrupts:
+    sei();
+}
+
+ISR(TIMER1_COMPA_vect)
+{
+   programTime++;
+   if(waterTemp>=heaterLimit){
+      int heaterOff = 0;
+      if(digitalRead(heaterRelayPin) == 1){
+        digitalWrite(heaterRelayPin, 0);
+      }
+      else{
+        heaterOff = 1;
+      }
+
+      if(heaterOff == 0){
+        // Make a new heater time variable
+      }
+   }
+   if(programTime == autoEndTime){
+    if(autoData == "heater")
+    {
+      digitalWrite(heaterRelayPin, 0);
+    }
+    else if(autoData == "filter")
+    {
+      digitalWrite(filterRelayPin, 0);
+    }
+   }
+
 }
 
 
